@@ -2,3 +2,5 @@
 *.csv
 *.txt
 data
+./DS_Store
+__pycache__
