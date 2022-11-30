@@ -1,6 +1,7 @@
 *.json
 *.csv
 *.txt
+*.ipynb
 data
 ./DS_Store
 __pycache__
