@@ -19,21 +19,21 @@ def read_nodeadjlist(filename):
             G.add_edge(int(e1),int(e))
     return G
 
-def writeline(_string,fh):
-    fh.write(_string+'\n')
+def writeline(_string, fh):
+    fh.write(_string + '\n')
 
-def write_test_file(output_file,cluster_function):
+def write_test_file(output_file, cluster_function):
     test_egos = []
     with open('sample_submission.csv','r') as f:
         for line in f:
             friend = line.split(',')[0]
             if friend != 'UserId':
-                test_egos.append( int(line.split(',')[0]) )
+                test_egos.append(int(line.split(',')[0]))
     with open(output_file,'w') as f:
-        writeline('UserId,Predicted',f)
+        writeline('UserId, Predicted', f)
         for ego in test_egos:
             print('Processing...')
-            G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
+            G = read_nodeadjlist('./data/egonets/' + str(ego) + '.egonet')
             pred_circles = cluster_function(G)
             for key,val in pred_circles.items():
                 if ego in val:
@@ -43,13 +43,13 @@ def write_test_file(output_file,cluster_function):
             writeline(outline, f)   
 
 def naive_spec_cluster(G,k=8):
-    cl = sklearn.cluster.spectral_clustering(nx.adjacency_matrix(G),n_clusters=k)
-    pred_circles ={}
+    cl = sklearn.cluster.spectral_clustering(nx.adjacency_matrix(G), n_clusters=k)
+    pred_circles = {}
     for circle,user in zip(cl,G.nodes()):  # ordering is the same as G.nodes()
         if circle in pred_circles:
-          pred_circles[circle].append(user)
+            pred_circles[circle].append(user)
         else:
-          pred_circles[circle]=[user]
+            pred_circles[circle]=[user]
     return pred_circles
 
 def compute_training_score(cluster_function):
@@ -85,13 +85,13 @@ def dynamic_spec_cluster(G,max_K=15):
     max_K = min(max_K,len(G.nodes()))
     max_mod = -2
     for k in range(1,max_K):
-        cl = sklearn.cluster.spectral_clustering(Adj_mat,n_clusters=k)
+        cl = sklearn.cluster.spectral_clustering(Adj_mat, n_clusters=k)
         pred_circles = {}
         for circle,user in zip(cl,G.nodes()):  # ordering is the same as G.nodes()
             if circle in pred_circles:
-              pred_circles[circle].append(user)
+                pred_circles[circle].append(user)
             else:
-              pred_circles[circle]=[user]
+                pred_circles[circle]=[user]
         pred_part = convert_circles_to_partition(pred_circles)
         pred_mod = community.modularity(pred_part,G)
         if pred_mod > max_mod:
