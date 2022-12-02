@@ -10,3 +10,7 @@
 ## Final Project
 * Title: **Learning social circles in networks**
 * Data Download link: https://www.kaggle.com/c/learning-social-circles/data
+* Reference Papper:
+    * http://i.stanford.edu/~julian/pdfs/nips2012.pdf
+    * https://www.sciencedirect.com/science/article/pii/S0925231215019323
+    
