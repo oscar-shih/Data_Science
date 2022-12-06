@@ -4,6 +4,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
 from sklearn.tree import export_text
 import copy
+
 def handle_str(x, Type):
     if Type == 'Car Type':
         if x == "Family":
@@ -31,6 +32,7 @@ def handle_str(x, Type):
             return 0
         else :
             return 1
+            
 df = pd.read_csv("data.csv").dropna(axis=0)
 df.index._data = np.array(df["Customer ID"])
 df = df.drop(axis=1, columns="Customer ID")
