@@ -2,6 +2,7 @@
 *.csv
 *.txt
 *.ipynb
+*.png
 data
 ./DS_Store
 __pycache__
