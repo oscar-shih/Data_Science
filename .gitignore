@@ -4,5 +4,8 @@
 *.ipynb
 *.png
 data
+digit
+sample_codes
+ref
 ./DS_Store
 __pycache__
