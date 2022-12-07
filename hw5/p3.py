@@ -3,11 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 clf = SVC(kernel='linear')
-label = ["Positive Samples", "Negative Samples"]
 X = np.array([[4, 3], [4, 8], [7, 2], [-1, -2], [-1, 3], [2, -1], [2, 1]])
 Y = np.array([1, 1, 1, -1, -1, -1, -1])
 clf.fit(X, Y)
-support_vec = clf.support_vectors_
 
 w = clf.coef_[0]
 a = -w[0] / w[1]
