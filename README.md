@@ -7,6 +7,7 @@
 * Hw4 100/100
 * Hw5 90/100 (P(A|C) is  wrong)
 
+
 ## Final Project
 * Title: **Learning social circles in networks**
 * Data Download link: https://www.kaggle.com/c/learning-social-circles/data
