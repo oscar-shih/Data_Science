@@ -7,7 +7,7 @@ import itertools
 import matplotlib.pyplot as plt
 
 def read_nodeadjlist(filename):
-    ego = int(filename.rsplit('/',1)[1].split('.')[0])
+    ego = int(filename.rsplit('/', 1)[1].split('.')[0])
     G = nx.Graph()
     for line in open(filename):
         e1, es = line.split(':')
@@ -62,8 +62,8 @@ def compute_training_score(cluster_function):
         G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
         pred_circles = cluster_function(G)
         for key,val in pred_circles.items():
-                if ego in val:
-                    pred_circles[key].remove(ego)
+            if ego in val:
+                pred_circles[key].remove(ego)
         pred_score[ego] = cost_function(pred_circles,true_circles)
     return pred_score
 
@@ -101,33 +101,38 @@ def dynamic_spec_cluster(G,max_K=15):
 
 if __name__ == "__main__":
     cl_test = compute_training_score(naive_spec_cluster)
-    print(sum(cl_test.values()))
-    write_test_file('fully_conn_naive_spec_no_ego.csv', naive_spec_cluster)
-    # Test with ego = 345
-    ego = 345
-    G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
-    pred_circles = naive_spec_cluster(G)
-    part = community.best_partition(G)
-    community.modularity(part, G)
-    spec_scores = compute_training_score(naive_spec_cluster)
-    dend_scores = compute_training_score(dendrogram_cluster)
+    # for ego, score in cl_test.items():
+    #     print("Ego, Score: ", ego, score)
+    print('Total: ', sum(cl_test.values()))
+    # write_test_file('fully_conn_naive_spec_no_ego.csv', naive_spec_cluster)
+    # # Test with ego = 345
+    # ego = 345
+    # G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
+    # pred_circles = naive_spec_cluster(G)
+    # part = community.best_partition(G)
+    # community.modularity(part, G)
+    # spec_scores = compute_training_score(naive_spec_cluster)
+    # dend_scores = compute_training_score(dendrogram_cluster)
 
-    write_test_file('dendrogram_no_ego.csv', dendrogram_cluster)
-    # Test with ego = 239
-    ego = 239
-    G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
-    modular_K = []
-    for K in range(1,19):
-        pred_circles = naive_spec_cluster(G,k=K)
-        pred_part = convert_circles_to_partition(pred_circles)
-        modular_K.append(community.modularity(pred_part,G))
-        print(K, modular_K[K-1])
-    plt.plot(range(1,19), modular_K)
-    plt.show()
+    # write_test_file('dendrogram_no_ego.csv', dendrogram_cluster)
+    # # Test with ego = 239
+    # ego = 239
+    # G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
+    # modular_K = []
+    # for K in range(1,19):
+    #     pred_circles = naive_spec_cluster(G,k=K)
+    #     pred_part = convert_circles_to_partition(pred_circles)
+    #     modular_K.append(community.modularity(pred_part,G))
+    #     print(K, modular_K[K-1])
+    # plt.plot(range(1,19), modular_K)
+    # plt.show()
 
     dyn_spec_scores = compute_training_score(dynamic_spec_cluster)
-    G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
-    true_circles = readcirclefile('./data/Training/'+str(ego)+'.circles')
-    dyn_test = dynamic_spec_cluster(G)
-    naive_test = naive_spec_cluster(G)
-    write_test_file('dynamic_spec_no_ego.csv', dynamic_spec_cluster)
+    # for ego, score in dyn_spec_scores.items():
+    #     print("Ego, Score: ", ego, score)
+    print('Total: ', sum(dyn_spec_scores.values()))
+    # G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
+    # true_circles = readcirclefile('./data/Training/'+str(ego)+'.circles')
+    # dyn_test = dynamic_spec_cluster(G)
+    # naive_test = naive_spec_cluster(G)
+    # write_test_file('dynamic_spec_no_ego.csv', dynamic_spec_cluster)
