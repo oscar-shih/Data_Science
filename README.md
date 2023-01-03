@@ -6,7 +6,7 @@
 * Hw3 95/100
 * Hw4 100/100
 * Hw5 90/100 (P(A|C) is  wrong)
-* Hw6 
+* Hw6 100/100
 
 ## Final Project
 * Title: **Learning social circles in networks**
