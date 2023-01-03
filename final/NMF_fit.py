@@ -4,9 +4,9 @@ import os
 import numpy as np
 import scipy as sp
 import sklearn as sk
-
+from sklearn import decomposition
 def read_nodeadjlist(filename):
-    ego = int(filename.rsplit('/',1)[1].split('.')[0])
+    ego = int(filename.rsplit('/', 1)[1].split('.')[0])
     G = nx.Graph()
     for line in open(filename):
         e1, es = line.split(':')
@@ -28,9 +28,9 @@ def compute_training_score(cluster_function):
         true_circles = readcirclefile('./data/Training/'+item)
         G = read_nodeadjlist('./data/egonets/'+str(ego)+'.egonet')
         pred_circles = cluster_function(G)
-        for key,val in pred_circles.items():
-                if ego in val:
-                    pred_circles[key].remove(ego)
+        for key, val in pred_circles.items():
+            if ego in val:
+                pred_circles[key].remove(ego)
         pred_score[ego] = cost_function(pred_circles,true_circles)
     return pred_score
 
@@ -39,7 +39,7 @@ def NMF_cluster(G, beta=0.2, thresh=0.5, N_comp=20, min_circle=5):
     expL = sp.linalg.expm(beta * L)
     
     N_nodes = len(G.nodes())
-    B = np.zeros([N_nodes,N_nodes])
+    B = np.zeros([N_nodes, N_nodes])
     
     for i in range(N_nodes):
         for j in range(N_nodes):
@@ -47,15 +47,16 @@ def NMF_cluster(G, beta=0.2, thresh=0.5, N_comp=20, min_circle=5):
             
     N_comp = min(N_comp,N_nodes)
             
-    nmf = sk.decomposition.NMF(n_components=N_comp)
+    nmf = decomposition.NMF(n_components=N_comp)
     comps= nmf.fit_transform(B)
 
     pred_circles = dict(zip(range(N_comp),[[] for _ in range(N_comp)]))
-    node_list = G.nodes()
+    node_list = list(G.nodes())
     for i in range(N_comp):
         for j, val in enumerate(comps[:,i]):
             if val > thresh:
                 pred_circles[i].append(node_list[j])
+                print(pred_circles[i])
                 
     return dict(((i,circle) for i, circle in pred_circles.items() if len(circle) >= min_circle))  
 
@@ -64,11 +65,11 @@ def writeline(_string,fh):
 
 def write_test_file(output_file,cluster_function):
     test_egos = []
-    with open('sample_submission.csv','r') as f:
+    with open('testSet_users_friends.csv','r') as f:
         for line in f:
             friend = line.split(',')[0]
             if friend != 'UserId':
-                test_egos.append( int(line.split(',')[0]) )
+                test_egos.append(int(line.split(',')[0]))
     with open(output_file,'w') as f:
         writeline('UserId,Predicted',f)
         for ego in test_egos:
@@ -99,7 +100,7 @@ if __name__ == "__main__":
 
 
     pred_score = compute_training_score(NMF_cluster)
-    for ego,score in pred_score.items():
+    for ego, score in pred_score.items():
         print("Ego, Score: ", ego, score)
     print('Total: ', sum(pred_score.values()))
-    write_test_file('fixed_NMF.csv',NMF_cluster)
+    # write_test_file('fixed_NMF.csv',NMF_cluster)

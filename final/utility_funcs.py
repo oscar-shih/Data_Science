@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 21 07:43:03 2014
-
-@author: bmkessle
-"""
 
 import networkx as nx
 import numpy as np
